@@ -25,10 +25,16 @@ namespace WebApp.Controllers
         public ActionResult ViewSub(int id, string sessionNum)
         {
             var list = db.MemoTypes.ToList();
+            var Jobs = from app in db.MemoTypes
+                       join job in db.SessionSubjects
+                       on app.ID equals job.MemoTypesID
+                       where job.NewSessionID == id
+                       select app;
+            //var list = db.MemoTypes.ToList();
             ViewBag.Result = id.ToString();
             ViewBag.sessionNum = sessionNum.ToString();
 
-            return View(list);
+            return View(Jobs.Distinct().ToList());
         }
         // GET: Memo/Details/5
         public ActionResult Details(int id)
